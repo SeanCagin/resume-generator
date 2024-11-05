@@ -1,5 +1,5 @@
 import { Resume } from "./Components"
-import './App.css'
+// import './App.css'
 
 function App() {
   return (

@@ -1,6 +1,8 @@
 import { defaultContact, defaultEducation, defaultExperience } from "./DefaultResume";
 import { useState } from "react";
-
+import trashIcon from "/delete.svg";
+import expandIcon from "/expand.svg";
+import "./styles.css"
 
 function Resume() {
     const [contact, updateContact] = useState(defaultContact);
@@ -15,13 +17,13 @@ function Resume() {
     let educationArr = [];
     let experienceArr = [];
     for (const key in contact) {
-        contactArr.push(<InputField title={key} location={key} changeHandler={handlers.changeContact} value={contact[key]} />);
+        contactArr.push(<InputField title={key} location={key} changeHandler={handlers.changeContact} value={contact[key]} key={key} />);
     }
     for (let i = 0; i < education.length; i++) {
-        educationArr.push(<ExpandField item={education[i]} changeHandler={handlers.changeEducation} removeHandler={handlers.removeEducation} index={i} expandedIndex={expandedEducation} expandedHandler={handlers.chooseEducation} />);
+        educationArr.push(<ExpandField item={education[i]} changeHandler={handlers.changeEducation} removeHandler={handlers.removeEducation} index={i} expandedIndex={expandedEducation} expandedHandler={handlers.chooseEducation} key={education[i].name} />);
     }
     for (let i = 0; i < experience.length; i++) {
-        experienceArr.push(<ExpandField item={experience[i]} changeHandler={handlers.changeExperience} removeHandler={handlers.removeExperience} index={i} expandedIndex={expandedExperience} expandedHandler={handlers.chooseExperience}/>);
+        experienceArr.push(<ExpandField item={experience[i]} changeHandler={handlers.changeExperience} removeHandler={handlers.removeExperience} index={i} expandedIndex={expandedExperience} expandedHandler={handlers.chooseExperience} key={experience[i].name} />);
     }
 
     return (<>
@@ -63,10 +65,10 @@ function ExpandField({item, index, changeHandler, removeHandler, expandedIndex, 
             <div className="contractedList">
                 <div className="contractedListTitle">{item.name} | {item.field}</div>
                 <div className="contractedListImages">
-                    <img src="" alt="delete field" onClick={() => {
+                    <img src={trashIcon} alt="delete field" onClick={() => {
                         removeHandler();
                     }} />
-                    <img src="" alt="expand field" onClick={() => {
+                    <img src={expandIcon} alt="expand field" onClick={() => {
                         expandedHandler(index);
                     }}/>
                 </div>
