@@ -1,5 +1,5 @@
 import { defaultContact, defaultEducation, defaultExperience } from "./DefaultResume";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import trashIcon from "/delete.svg";
 import expandIcon from "/expand.svg";
 import "./styles.css"
@@ -11,6 +11,14 @@ function Resume() {
     const [expandedEducation, changeExpandedEducation] = useState(-1);
     const [expandedExperience, changeExpandedExperience] = useState(-1);
 
+    useEffect(() => {
+        console.log('mounted');
+     
+        return () => { 
+            console.log('unmounted')
+        }
+     }, []);
+
     let handlers = getHandlers(contact, education, experience, updateContact, updateEduction, updateExperience, changeExpandedEducation, changeExpandedExperience);
 
     let contactArr = [];
@@ -20,10 +28,10 @@ function Resume() {
         contactArr.push(<InputField title={key} location={key} changeHandler={handlers.changeContact} value={contact[key]} key={key} />);
     }
     for (let i = 0; i < education.length; i++) {
-        educationArr.push(<ExpandField item={education[i]} changeHandler={handlers.changeEducation} removeHandler={handlers.removeEducation} index={i} expandedIndex={expandedEducation} expandedHandler={handlers.chooseEducation} key={education[i].name} />);
+        educationArr.push(<ExpandField item={education[i]} changeHandler={handlers.changeEducation} removeHandler={handlers.removeEducation} index={i} expandedIndex={expandedEducation} expandedHandler={handlers.chooseEducation} key={education[i].id} />);
     }
     for (let i = 0; i < experience.length; i++) {
-        experienceArr.push(<ExpandField item={experience[i]} changeHandler={handlers.changeExperience} removeHandler={handlers.removeExperience} index={i} expandedIndex={expandedExperience} expandedHandler={handlers.chooseExperience} key={experience[i].name} />);
+        experienceArr.push(<ExpandField item={experience[i]} changeHandler={handlers.changeExperience} removeHandler={handlers.removeExperience} index={i} expandedIndex={expandedExperience} expandedHandler={handlers.chooseExperience} key={experience[i].id} />);
     }
 
     return (<>
@@ -45,13 +53,19 @@ function Resume() {
 }
 
 function InputField({title, changeHandler, value}) {
-    return (<div className="input-group">
-        <label htmlFor={location + value}>{title}</label>
-        <input 
-            id={location + value}  
-            onChange={(e) => {changeHandler(e, title);}} 
-            value={value}
-        />
+    return (<div className="input-group" onClick={ (e) => {
+        if (e.target.classList.contains("input-group")) {
+            e.target.childNodes[1].focus();
+        }
+    }}>
+        <label>
+            <div>{title}</div>
+            <input 
+                onChange={(e) => {changeHandler(e, title);}} 
+                value={value}
+                autoFocus
+            />
+        </label>
     </div>)
 }
 
@@ -66,7 +80,7 @@ function ExpandField({item, index, changeHandler, removeHandler, expandedIndex, 
                 <div className="contractedListTitle">{item.name} | {item.field}</div>
                 <div className="contractedListImages">
                     <img src={trashIcon} alt="delete field" onClick={() => {
-                        removeHandler();
+                        removeHandler(index);
                     }} />
                     <img src={expandIcon} alt="expand field" onClick={() => {
                         expandedHandler(index);
@@ -77,7 +91,9 @@ function ExpandField({item, index, changeHandler, removeHandler, expandedIndex, 
     } else {
         let fieldArr = [];
         for (const key in item) {
-            fieldArr.push(<InputField title={key} changeHandler={modifiedChangeHandler} value={item[key]} />);
+            if (key != "id") {
+                fieldArr.push(<InputField title={key} changeHandler={modifiedChangeHandler} value={item[key]} key={key} />);
+            }
         }
         return (
             <div className="expandedList">
@@ -87,7 +103,7 @@ function ExpandField({item, index, changeHandler, removeHandler, expandedIndex, 
     }
 }
 
-function getHandlers(contact, education, experience,
+function getHandlers(contact, education, experience, 
      updateContact, updateEduction, updateExperience, updateExpandedEducation, updateExpandedExperience) {
     return {
         changeContact(e, field) {
@@ -95,14 +111,14 @@ function getHandlers(contact, education, experience,
             newArr[field] = e.target.value;
             updateContact(newArr);
         },
-        changeEducation(e, index, fieldName) {
+        changeEducation(e, index, field) {
             let newArr = cloneObjectArray(education);
-            newArr[index][fieldName] = e.target.value;
+            newArr[index][field] = e.target.value;
             updateEduction(newArr);
         },
-        changeExperience(e, index, fieldName) {
+        changeExperience(e, index, field) {
             let newArr = cloneObjectArray(education);
-            newArr[index][fieldName] = e.target.value;
+            newArr[index][field] = e.target.value;
             updateExperience(newArr);
         },
         removeEducation(index) {
@@ -117,13 +133,15 @@ function getHandlers(contact, education, experience,
         },
         addEducation() {
             let newArr = cloneObjectArray(education);
-            newArr.push({});
+            newArr.push(getEmptyEducation());
             updateEduction(newArr);
+            updateExpandedEducation(newArr.length - 1);
         },
         addExperience() {
             let newArr = cloneObjectArray(experience);
-            newArr.push({});
-            updateEduction(newArr);
+            newArr.push(getEmptyExperience());
+            updateExperience(newArr);
+            updateExpandedExperience(newArr.length - 1);
         },
         chooseEducation(index) {
             updateExpandedEducation(index);
@@ -140,6 +158,34 @@ function cloneObjectArray(arr) {
         newArr.push(structuredClone(arr[i]));
     }
     return newArr;
+}
+
+function getEmptyEducation() {
+    return {
+        name: "",
+        GPA: "",
+        field: "",
+        location: "",
+        startDate: "",
+        endDate: "",
+        onGoing: false,
+        id: makeId(),
+    }
+}
+
+function getEmptyExperience() {
+    return {
+        name: "",
+        startDate: "",
+        endDate: "",
+        description: "",
+        onGoing: false,
+        id: makeId(),
+    }
+}
+
+function makeId(){
+    return Date.now().toString(36) + Math.random().toString(36).substring(2);
 }
 
 export {Resume};

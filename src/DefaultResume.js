@@ -16,6 +16,7 @@ const defaultEducation = [
     location: "Commonwealth",
     startDate: "Thaw 2023",
     onGoing: true,
+    id: 0,
   },
   {
     name: "The Streets of Tarbean",
@@ -25,6 +26,7 @@ const defaultEducation = [
     startDate: "Thaw 2016",
     endDate: "Dearth 2022",
     onGoing: false,
+    id: 1,
   },
 ];
 
@@ -36,6 +38,7 @@ const defaultExperience = [
     description:
       "Kvothe and Denna find a Draccus. Denna accidentally eats drugs in a cave. If memory serves correctly, this was one of the most romantic events in the entire series.",
     onGoing: false,
+    id: 0,
   },
   {
     name: "Ademre",
@@ -44,6 +47,7 @@ const defaultExperience = [
     description:
       "Kvothe ventures off into the land of the Adem — a place where diverse experiences gain a whole new meaning. He left an accomplished swordsman, although his abilities pale compared to the best among the Adem.",
     onGoing: false,
+    id: 1,
   },
 ];
 

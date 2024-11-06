@@ -1,24 +1,27 @@
 :root {
   --main-bg-color: #242424;
 }
+h2 {
+  font-size: 15px;
+}
 .input-group {
   padding: 10px;
-  border: 2px solid;
+  border: 1px solid;
   margin: 30px 15px;
   position: relative;
   width: 200px;
+  border-radius: 10px;
 }
-.input-group > label {
+.input-group > label > div {
   position: absolute;
-  top: -20px;
+  top: -13px;
   left: 20px;
   padding: 0 5px;
   background-color: var(--main-bg-color);
 }
-.input-group > input {
+.input-group input {
   border: none;
   background-color: var(--main-bg-color);
   outline: none;
   width: 100%;
-  height: 100%;
 }
