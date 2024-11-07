@@ -36,7 +36,7 @@ function Resume() {
     }
 
     return (<div className="page">
-        <div className="controls">
+        <div className="controls noPrint">
             <h2>
                 Contact Information
                 {contactArr}
@@ -56,7 +56,7 @@ function Resume() {
     </div>);
 }
 
-function InputField({title, changeHandler, value}) {
+function InputField({title, changeHandler, value, type}) {
     return (<div className="input-group" onClick={ (e) => {
         if (e.target.classList.contains("input-group")) {
             e.target.childNodes[1].focus();
@@ -64,14 +64,19 @@ function InputField({title, changeHandler, value}) {
     }}>
         <label>
             <div>{title}</div>
-            <input 
-                onChange={(e) => {changeHandler(e, title);}} 
-                value={value}
-                autoFocus
-            />
+                {title !== "description" ? (<input
+                    onChange={(e) => {changeHandler(e, title);}} 
+                    value={value}
+                    autoFocus
+                />) : <textarea onChange={(e) => {changeHandler(e, title);}} 
+                        value={value}
+                        autoFocus />
+            }
+
         </label>
     </div>)
 }
+
 
 function ExpandField({item, index, changeHandler, removeHandler, expandedIndex, expandedHandler}) {
     let expanded = index === expandedIndex;
@@ -121,7 +126,7 @@ function getHandlers(contact, education, experience,
             updateEduction(newArr);
         },
         changeExperience(e, index, field) {
-            let newArr = cloneObjectArray(education);
+            let newArr = cloneObjectArray(experience);
             newArr[index][field] = e.target.value;
             updateExperience(newArr);
         },
