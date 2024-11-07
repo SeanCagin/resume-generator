@@ -52,7 +52,9 @@ function Resume() {
                 <button className="addButton" onClick={handlers.addExperience}>Add Experience</button>
             </h2>
         </div>
-        <PrintResume contact={contact} education={education} experience={experience} />
+        <div className="resumeHolder">
+            <PrintResume contact={contact} education={education} experience={experience} />
+        </div>
     </div>);
 }
 
