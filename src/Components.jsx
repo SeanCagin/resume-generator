@@ -1,4 +1,5 @@
 import { defaultContact, defaultEducation, defaultExperience } from "./DefaultResume";
+import PrintResume from "./PrintResume";
 import { useState, useEffect } from "react";
 import trashIcon from "/delete.svg";
 import expandIcon from "/expand.svg";
@@ -34,22 +35,25 @@ function Resume() {
         experienceArr.push(<ExpandField item={experience[i]} changeHandler={handlers.changeExperience} removeHandler={handlers.removeExperience} index={i} expandedIndex={expandedExperience} expandedHandler={handlers.chooseExperience} key={experience[i].id} />);
     }
 
-    return (<>
-        <h2>
-            Contact Information
-            {contactArr}
-        </h2>
-        <h2>
-            Education
-            {educationArr}
-            <button className="addButton" onClick={handlers.addEducation}>Add Education</button>
-        </h2>
-        <h2>
-            Experience
-            {experienceArr}
-            <button className="addButton" onClick={handlers.addExperience}>Add Experience</button>
-        </h2>
-    </>);
+    return (<div className="page">
+        <div className="controls">
+            <h2>
+                Contact Information
+                {contactArr}
+            </h2>
+            <h2>
+                Education
+                {educationArr}
+                <button className="addButton" onClick={handlers.addEducation}>Add Education</button>
+            </h2>
+            <h2>
+                Experience
+                {experienceArr}
+                <button className="addButton" onClick={handlers.addExperience}>Add Experience</button>
+            </h2>
+        </div>
+        <PrintResume contact={contact} education={education} experience={experience} />
+    </div>);
 }
 
 function InputField({title, changeHandler, value}) {
@@ -133,13 +137,13 @@ function getHandlers(contact, education, experience,
         },
         addEducation() {
             let newArr = cloneObjectArray(education);
-            newArr.push(getEmptyEducation());
+            newArr.push(getEmptySubsection());
             updateEduction(newArr);
             updateExpandedEducation(newArr.length - 1);
         },
         addExperience() {
             let newArr = cloneObjectArray(experience);
-            newArr.push(getEmptyExperience());
+            newArr.push(getEmptySubsection());
             updateExperience(newArr);
             updateExpandedExperience(newArr.length - 1);
         },
@@ -160,22 +164,11 @@ function cloneObjectArray(arr) {
     return newArr;
 }
 
-function getEmptyEducation() {
+function getEmptySubsection() {
     return {
         name: "",
-        GPA: "",
         field: "",
         location: "",
-        startDate: "",
-        endDate: "",
-        onGoing: false,
-        id: makeId(),
-    }
-}
-
-function getEmptyExperience() {
-    return {
-        name: "",
         startDate: "",
         endDate: "",
         description: "",

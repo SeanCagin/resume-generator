@@ -25,3 +25,9 @@ h2 {
   outline: none;
   width: 100%;
 }
+
+.printResume {
+  background-color: white;
+  color: black;
+  font-family: 'Times New Roman', Times, serif;
+}
