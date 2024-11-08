@@ -14,7 +14,7 @@ function ResumeHeader({contact}) {
         if (i !== contactArray.length - 1) {
             pushVal += " | ";
         }
-        contactSubarray.push(<span className="resumeContactSubitem">{pushVal}</span>);
+        contactSubarray.push(<span className="resumeContactSubitem" key={i}>{pushVal}</span>);
     }
     return (
         <div className="resumeHeader">
@@ -31,7 +31,7 @@ function ResumeSection({items, sectionTitle}) {
     return (<div className="resumeSection">
         <h2 className="resumeSectionTitle"><strong>{sectionTitle}</strong></h2>
         <hr />
-        {items.map((item) => (<ResumeSubsection item={item} />))}
+        {items.map((item, index) => (<ResumeSubsection item={item} key={index} />))}
     </div>);
 }
 
@@ -58,7 +58,7 @@ function RightSubseciton({item}) {
         <div className="date">
             <strong>
                 {item.startDate}
-                {!item.onGoing ? ` — ${item.endDate}` : ""}
+                {!(item.onGoing === true) ? ` — ${item.endDate}` : ""}
             </strong>
         </div>
         <div className="subsectionLocation">
